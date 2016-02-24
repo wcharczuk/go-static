@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 )
@@ -17,8 +18,10 @@ func port() string {
 func main() {
 	pwd, pwdErr := os.Getwd()
 	if pwdErr != nil {
-		fmt.Errorf(pwdErr)
+		fmt.Errorf(pwdErr.Error())
 		os.Exit(1)
 	}
-	panic(http.ListenAndServe(":"+port(), http.FileServer(http.Dir(pwd))))
+	fmt.Printf("Static File Server Listening on: %s\n", port())
+	fs := http.FileServer(http.Dir(pwd))
+	log.Fatal(http.ListenAndServe(":"+port(), fs))
 }
