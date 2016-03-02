@@ -84,5 +84,11 @@ func (f *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	delta := end.Sub(start)
 	contentLength := w.Header().Get("Content-Length")
 
-	f.Log.Printf("%s - %s - %s - %s - %v - %s bytes", start.Format(time.RFC3339), ip, r.Method, r.URL.Path, delta, contentLength)
+	if len(contentLength) == 0 {
+		contentLength = "cached"
+	} else {
+		contentLength = fmt.Sprintf("%s bytes", contentLength)
+	}
+
+	f.Log.Printf("%s - %s - %s - %s - %v - %s", start.Format(time.RFC3339), ip, r.Method, r.URL.Path, delta, contentLength)
 }
